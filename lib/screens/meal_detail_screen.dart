@@ -3,6 +3,10 @@ import 'package:meals/dummy_data.dart';
 
 class MealDeatilScreen extends StatelessWidget {
   static const routeName = '/meal-detail';
+  final Function toggleFavorite;
+  final Function isFavorite;
+
+  MealDeatilScreen(this.toggleFavorite, this.isFavorite);
 
   Widget buildSectionTitle(BuildContext context, String title) {
     return Container(
@@ -41,6 +45,14 @@ class MealDeatilScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('${selectedMeal.title}'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              Navigator.of(context).pop(mealId);
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -85,15 +97,24 @@ class MealDeatilScreen extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            FlatButton(
+              child: Icon(
+                Icons.delete,
+                color: Theme.of(context).primaryColor,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(mealId);
+              },
             )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.delete),
-        onPressed: () {
-          Navigator.of(context).pop(mealId);
-        },
+        child: Icon(
+          isFavorite(mealId) ? Icons.star : Icons.star_border,
+        ),
+        onPressed: () => toggleFavorite(mealId),
       ),
     );
   }
